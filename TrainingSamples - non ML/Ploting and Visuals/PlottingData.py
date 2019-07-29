@@ -1,3 +1,6 @@
+#Changing Style 
+plt.style.use('seaborn-notebook')
+print(plt.style.available)
 #Separate axis
 plt.axes([0.05 ,0.05,0.425,0.9])
 plt.plot(year, physical_sciences, color='blue')
