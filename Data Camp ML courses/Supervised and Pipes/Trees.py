@@ -12,15 +12,30 @@ test_size=0.2,
 stratify=y,
 random_state=1)
 ###Random Tree
-# =============================================================================
-# dt = DecisionTreeClassifier(max_depth=8, random_state=1,criterion='gini')#criterion='entropy'
-# dt.fit(X_train, y_train)
-# y_pred = dt.predict(X_test)
-# 
-# acc = accuracy_score(y_test, y_pred)
-# print("Test set accuracy: {:.2f}".format(acc))
-# =============================================================================
+#dt = DecisionTreeClassifier(max_depth=8, random_state=1,criterion='gini')#criterion='entropy'
+#dt.fit(X_train, y_train)
+#y_pred = dt.predict(X_test)
+#acc = accuracy_score(y_test, y_pred)
+#print("Test set accuracy: {:.2f}".format(acc))
 
+#HyperTune
+params_dt = {'max_depth':[ 2, 3,  4,8,10],'min_samples_leaf': [0.12, 0.14, 0.16, 0.18]}
+dt = DecisionTreeClassifier()
+
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import roc_auc_score
+grid_dt = GridSearchCV(estimator=dt,
+                       param_grid=params_dt,
+                       scoring='roc_auc',
+                       cv=5,
+                       n_jobs=-1)
+
+grid_dt.fit(X_train,y_train)
+best_model = grid_dt.best_estimator_
+# Predict the test set probabilities of the positive class
+y_pred_proba = best_model.predict_proba(X_test)[:,1]
+test_roc_auc = roc_auc_score(y_test, y_pred_proba)
+print('Test set ROC AUC score: {:.3f}'.format(test_roc_auc))
 
 ###Regression Tree
 # =============================================================================
@@ -62,7 +77,7 @@ rf = RandomForestRegressor(n_estimators=25 ,
 rf.fit(X_train, y_train) 
 y_pred = rf.predict(X_test)
 rmse_test = MSE(y_test, y_pred)**(1/2)
-print('Test set RMSE of Random Forrest: {:.2f}'.format(rmse_test))
+print('Test set RMSE of Random Forrest: {:.3f}'.format(rmse_test))
 
 # Create a pd.Series of features importances
 importances = pd.Series(data=rf.feature_importances_)#add index = columns for better representation
@@ -74,3 +89,24 @@ importances_sorted = importances.sort_values()
 importances_sorted.plot(kind='barh', color='lightgreen')
 plt.title('Features Importances')
 plt.show()
+
+#HyperTune a model for Testing
+# Define the dictionary 'params_rf'
+params_rf = {
+             'n_estimators': [100, 350, 500],
+             'max_features': ['log2', 'auto', 'sqrt'],
+             'min_samples_leaf': [2, 10, 30], 
+             }
+
+grid_rf = GridSearchCV(estimator= RandomForestRegressor(),
+                       param_grid=params_rf,
+                       scoring='neg_mean_squared_error',
+                       cv=3,
+                       verbose=1,
+                       n_jobs=-1)
+
+grid_rf.fit(X_train,y_train)
+best_model = grid_rf.best_estimator_
+y_pred = best_model.predict(X_test)
+rmse_test = MSE(y_test, y_pred)**(1/2)
+print('Test RMSE of best model: {:.3f}'.format(rmse_test)) 
