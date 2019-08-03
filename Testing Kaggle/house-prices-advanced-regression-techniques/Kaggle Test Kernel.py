@@ -122,8 +122,11 @@ keras_pred=np.expm1(keras_model.predict(test))
 
 keras_train = keras_model.predict(X)
 print(np.sqrt(mean_squared_error(y, keras_train)))
-
-ensemble = 0.5*keras_pred+0.5*xgb_pred
+#ensemble = keras_pred*0.5+xgb_pred*0.5
+ensemble = np.zeros(shape=(1459,1))
+for i in range(1459) :
+    ensemble[i] = keras_pred[i]*0.5 + xgb_pred[i]*0.5
+    
 sub = pd.DataFrame()
 sub['Id'] = test_ID
 sub['SalePrice'] = ensemble
