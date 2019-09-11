@@ -7,7 +7,7 @@ os.getcwd()  # Return the current working directory
 # os.chdir('/server/accesslogs')   # Change current working directory
 # os.system('mkdir today')   # Run the command mkdir in the system shell
 
-
+#Testing Git with Pycharm
 class AsyncZip(threading.Thread):
     def __init__(self, infile, outfile):
         threading.Thread.__init__(self)

@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="71714f9c-c6cb-4e66-b929-d8b1f80ebad5" name="Default Changelist" comment="" />
+    <list default="true" id="71714f9c-c6cb-4e66-b929-d8b1f80ebad5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Random Tests From Documentation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Random Tests From Documentation.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,6 +33,24 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <favorite-branches>
+      <branch-storage>
+        <map>
+          <entry type="LOCAL">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$/.." source="test" />
+              </list>
+            </value>
+          </entry>
+        </map>
+      </branch-storage>
+    </favorite-branches>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/.." value="test" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="ProjectId" id="1PjCCaVm24qokiqCmCNuo7CR5wD" />
@@ -37,6 +58,7 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="D:/Work/PyCharm/Jumpstart del me/apps/07_wizard_battle" />
     <property name="settings.editor.selected.configurable" value="vcs.Git" />
   </component>
   <component name="RunDashboard">
@@ -122,6 +144,9 @@
       <list>
         <item itemvalue="Python.Random Tests From Documentation" />
         <item itemvalue="Python.EDA" />
+        <item itemvalue="Python.Random Tests From Documentation" />
+        <item itemvalue="Python.EDA" />
+        <item itemvalue="Python.Random Tests From Documentation" />
       </list>
     </recent_temporary>
   </component>
@@ -138,7 +163,8 @@
       <workItem from="1566377993380" duration="774000" />
       <workItem from="1566764067032" duration="1795000" />
       <workItem from="1567408809692" duration="1554000" />
-      <workItem from="1568189142846" duration="1674000" />
+      <workItem from="1568189142846" duration="1722000" />
+      <workItem from="1568195555737" duration="2254000" />
     </task>
     <servers />
   </component>
