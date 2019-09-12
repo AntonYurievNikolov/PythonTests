@@ -2,6 +2,39 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="71714f9c-c6cb-4e66-b929-d8b1f80ebad5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/.idea/Bootstrap.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/css/bootstrap-grid.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/css/bootstrap-grid.css.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/css/bootstrap-grid.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/css/bootstrap-grid.min.css.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/css/bootstrap-reboot.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/css/bootstrap-reboot.css.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/css/bootstrap-reboot.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/css/bootstrap-reboot.min.css.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/css/bootstrap.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/css/bootstrap.css.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/css/bootstrap.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/css/bootstrap.min.css.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/js/bootstrap.bundle.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/js/bootstrap.bundle.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/js/bootstrap.bundle.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/js/bootstrap.bundle.min.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/js/bootstrap.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/js/bootstrap.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/js/bootstrap.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/js/bootstrap.min.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/js/site.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Test/DB test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Test/program.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Test/runs.db" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Test/service.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Random Tests From Documentation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Random Tests From Documentation.py" afterDir="false" />
     </list>
@@ -58,8 +91,8 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="D:/Work/PyCharm/Jumpstart del me/apps/07_wizard_battle" />
-    <property name="settings.editor.selected.configurable" value="vcs.Git" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../PyCharmTests" />
+    <property name="settings.editor.selected.configurable" value="editing.templates" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -164,16 +197,52 @@
       <workItem from="1566764067032" duration="1795000" />
       <workItem from="1567408809692" duration="1554000" />
       <workItem from="1568189142846" duration="1722000" />
-      <workItem from="1568195555737" duration="2254000" />
+      <workItem from="1568195555737" duration="3396000" />
+      <workItem from="1568275351662" duration="1205000" />
     </task>
+    <task id="LOCAL-00001" summary="Testing Pycharm's Git">
+      <created>1568229503018</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1568229503018</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ORDER">
+      <list>
+        <option value="0" />
+        <option value="2" />
+        <option value="3" />
+        <option value="1" />
+      </list>
+    </option>
+  </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
+        <entry key="1">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="range">
+                    <value>
+                      <list>
+                        <option value="HEAD..origin/master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
         <entry key="MAIN">
           <value>
             <State>
@@ -183,6 +252,15 @@
         </entry>
       </map>
     </option>
+    <option name="OPEN_TABS">
+      <set>
+        <option value="1" />
+      </set>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Testing Pycharm's Git" />
+    <option name="LAST_COMMIT_MESSAGE" value="Testing Pycharm's Git" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/EDA$EDA.coverage" NAME="EDA Coverage Results" MODIFIED="1566378419003" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
