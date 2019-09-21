@@ -2,41 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="71714f9c-c6cb-4e66-b929-d8b1f80ebad5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../PyCharmTests/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PyCharmTests/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/.idea/Bootstrap.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/css/bootstrap-grid.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/css/bootstrap-grid.css.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/css/bootstrap-grid.min.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/css/bootstrap-grid.min.css.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/css/bootstrap-reboot.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/css/bootstrap-reboot.css.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/css/bootstrap-reboot.min.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/css/bootstrap-reboot.min.css.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/css/bootstrap.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/css/bootstrap.css.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/css/bootstrap.min.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/css/bootstrap.min.css.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/js/bootstrap.bundle.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/js/bootstrap.bundle.js.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/js/bootstrap.bundle.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/js/bootstrap.bundle.min.js.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/js/bootstrap.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/js/bootstrap.js.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/js/bootstrap.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/js/bootstrap.min.js.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/js/site.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Test/DB test.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Test/program.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Test/runs.db" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Test/service.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Test/UnitTesting/numparser.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Test/UnitTesting/test_parser.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PyCharmTests/Test/pets.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Random Tests From Documentation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Random Tests From Documentation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PyCharmTests/.idea/PyCharmTests.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../PyCharmTests/.idea/PyCharmTests.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PyCharmTests/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../PyCharmTests/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/.idea/Bootstrap.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../PyCharmTests/Bootstrap/.idea/Bootstrap.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PyCharmTests/Test/DB test.py" beforeDir="false" afterPath="$PROJECT_DIR$/../PyCharmTests/Test/DB test.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -198,7 +171,8 @@
       <workItem from="1567408809692" duration="1554000" />
       <workItem from="1568189142846" duration="1722000" />
       <workItem from="1568195555737" duration="3396000" />
-      <workItem from="1568275351662" duration="1205000" />
+      <workItem from="1568275351662" duration="1215000" />
+      <workItem from="1568291063746" duration="1811000" />
     </task>
     <task id="LOCAL-00001" summary="Testing Pycharm's Git">
       <created>1568229503018</created>

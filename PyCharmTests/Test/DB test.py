@@ -17,4 +17,8 @@ with conn:
     c.execute("INSERT INTO Run VALUES(0, 0, 0, 52)")
     c.execute("INSERT INTO Run VALUES(1, 0, 0, 50)")
 
-q = 'SELECT * FROM Person WHERE name IS NOT NULL'
+    q = 'SELECT * FROM Person WHERE name IS NOT NULL'
+
+    c.execute(q)
+    for row in c.fetchall():
+        print(row)
