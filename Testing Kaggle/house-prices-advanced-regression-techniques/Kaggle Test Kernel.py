@@ -1,4 +1,5 @@
 # Import xgboost
+import os
 import xgboost as xgb
 import pandas as pd
 import numpy as np
@@ -10,7 +11,8 @@ from keras import optimizers
 #
 #train = pd.read_csv('../input/train.csv')
 #test = pd.read_csv('../input/test.csv')
-
+#path = "D:\PythonTests\Testing Kaggle\house-prices-advanced-regression-techniques"
+#os.chdir(path)
 train = pd.read_csv("train.csv")
 test = pd.read_csv("test.csv")
 #We do not need the ID column

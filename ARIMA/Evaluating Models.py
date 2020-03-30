@@ -57,7 +57,7 @@ savings.plot()
 plt.show()
 
 # Run Dicky-Fuller test
-result = adfuller(savings['savings'])
+result = adfuller(savings['savings'])  # type: Any
 # Print test statistic
 print(result[0])
 # Print p-value
