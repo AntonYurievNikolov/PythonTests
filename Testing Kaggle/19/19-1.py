@@ -21,6 +21,7 @@ data.rename(columns={'Date': 'date',
                      'ConfirmedCases': 'confirmed',
                      'Fatalities':'deaths',
                     }, inplace=True)
+
 data.head()
 cleaned_data = pd.read_csv('D:\\PythonTests\\Testing Kaggle\\19\\covid_19_clean_complete.csv', parse_dates=['Date'])
 cleaned_data.head()
@@ -64,19 +65,29 @@ grouped_bulgaria_date["newCases"] = grouped_bulgaria_date["newCases"].fillna(met
 grouped_bulgaria_date["newCasesRolling"] = grouped_bulgaria_date.rolling(7,1)["newCases"].mean()
 grouped_bulgaria_date["confirmedLog"] = np.log(grouped_bulgaria_date["confirmed"])
 #check the Trend 
-#ax = sns.lineplot(y="newCasesRolling", x="confirmed", data=grouped_bulgaria_date)
 ax2 = sns.lineplot(y="newCasesRolling", x="confirmedLog", data=grouped_bulgaria_date)
-
+plt.xlabel("Total Confirmed Cases - log scale")
+plt.xscale("log")
+plt.ylabel("New Daily Cases")
 #Other for reference
-country = "China"
+#country = "China"
+country = "Italy"
 grouped_ref = data[data['country'] == country].reset_index()
 grouped_ref_date = grouped_ref.groupby('date')['date', 'confirmed', 'deaths'].sum().reset_index()
 
 #enchance the data
 grouped_ref_date["newCases"] = grouped_ref_date["confirmed"] - grouped_ref_date["confirmed"].shift()
 grouped_ref_date["newCases"] = grouped_ref_date["newCases"].fillna(method='backfill')
-grouped_ref_date["newCasesRolling"] = grouped_ref_date.rolling(2,1)["newCases"].mean()
+grouped_ref_date["newCasesRolling"] = grouped_ref_date.rolling(7,1)["newCases"].mean()
 grouped_ref_date["confirmedLog"] = np.log(grouped_ref_date["confirmed"])
 #check the Trend 
-#ax = sns.lineplot(y="newCasesRolling", x="confirmed", data=grouped_ref_date)
-ax2 = sns.lineplot(y="newCasesRolling", x="confirmedLog", data=grouped_ref_date)
+ax3 = sns.lineplot(y="newCasesRolling", x="confirmed", data=grouped_ref_date)
+plt.xlabel("Total Confirmed Cases - log scale")
+plt.xscale("log")
+plt.ylabel("New Daily Cases")
+#Try Better plot I can send 
+#import plotly.express as px
+#
+#df = px.data.gapminder().query("country=='Canada'")
+#fig = px.line(df, x="year", y="lifeExp", title='Life expectancy in Canada')
+#fig.show()

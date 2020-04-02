@@ -17,3 +17,24 @@ if (isSubsetSum(set, n, sum) == True) :
 	print("Yes") 
 else : 
 	print("No") 
+
+
+import pandas as pd
+class A:
+    data = []
+    def __init__(self):
+        self.data = [3, 34, 4, 12, 5, 2, 120]  
+ 
+class B(A):
+    def __init__(self):
+        A.__init__(self)
+        self.betterdata = pd.array(self.data)*2  - 1
+        
+def test(t):
+    for i in range(len(t)-1):
+        print (t[i])
+    
+x = A()  
+test(x.data)
+y= B()
+test(y.betterdata)
