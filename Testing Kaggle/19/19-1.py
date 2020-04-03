@@ -1,7 +1,7 @@
 
 import numpy as np
 import pandas as pd
-
+import math
 
 
 import seaborn as sns
@@ -91,3 +91,22 @@ plt.ylabel("New Daily Cases")
 #df = px.data.gapminder().query("country=='Canada'")
 #fig = px.line(df, x="year", y="lifeExp", title='Life expectancy in Canada')
 #fig.show()
+
+#show why this is important
+exp = [2.5**i for i in range(20)]
+quadratic = [0.5*i*i for i in range(20)]
+i = [i for i in range(20)]
+dict = {'exp': exp, 'quadratic': quadratic, 'period': i}  
+TestData = pd.DataFrame(dict,index = i)
+
+
+ax4 = sns.lineplot(y="quadratic", x="period", data=TestData)
+plt.xlabel("Periods passed")
+
+plt.ylabel("Quadratic - New Daily Cases")
+
+
+ax4 = sns.lineplot(y="exp", x="period", data=TestData)
+plt.xlabel("Periods passed")
+
+plt.ylabel("Exponent - New Daily Cases")
