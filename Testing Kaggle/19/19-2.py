@@ -60,7 +60,7 @@ plt.xscale("log")
 plt.ylabel("New Daily Cases")
 #Other for reference
 #country = "China"
-country = "Italy"
+country = "US"
 grouped_ref = data[data['country'] == country].reset_index()
 grouped_ref_date = grouped_ref.groupby('date')['date', 'confirmed', 'deaths'].sum().reset_index()
 
@@ -70,7 +70,7 @@ grouped_ref_date["newCases"] = grouped_ref_date["newCases"].fillna(method='backf
 grouped_ref_date["newCasesRolling"] = grouped_ref_date.rolling(7,1)["newCases"].mean()
 grouped_ref_date["confirmedLog"] = np.log(grouped_ref_date["confirmed"])
 #check the Trend 
-ax3 = sns.lineplot(y="newCasesRolling", x="confirmed", data=grouped_ref_date)
+ax3 = sns.lineplot(y="newCasesRolling", x="confirmedLog", data=grouped_ref_date)
 plt.xlabel("Total Confirmed Cases - log scale")
 plt.xscale("log")
 plt.ylabel("New Daily Cases")

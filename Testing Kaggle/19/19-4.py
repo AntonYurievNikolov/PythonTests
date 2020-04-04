@@ -5,6 +5,9 @@ from sklearn.metrics import mean_squared_error
 from sklearn import linear_model
 from sklearn import preprocessing
 
+from keras.models import Sequential
+from keras import layers
+from keras.optimizers import RMSprop,Adam
 from xgboost import XGBRegressor
 data_dir = Path('D:\\PythonTests\\Testing Kaggle\\19\\covid19-global-forecasting-week-3\\')
 #data_dir = '/kaggle/input/covid19-global-forecasting-week-3/'
@@ -20,8 +23,8 @@ test.rename(columns={'Country_Region':'Country'}, inplace=True)
 train.rename(columns={'Province_State':'State'}, inplace=True)
 test.rename(columns={'Province_State':'State'}, inplace=True)
 
-#xtrain = xtrain[xtrain['Country'] == "Bulgaria"]
-#xtest= xtest[xtest['Country'] == "Bulgaria"]
+train = train[train['Country'] == "Bulgaria"]
+test= test[test['Country'] == "Bulgaria"]
 
 
 y1_Train = train.iloc[:, -2]
@@ -92,37 +95,29 @@ for country in countries:
         
 
         #After we transform them they should roughly follow linear regression trend
-        y1_Train_CS = y1_Train_CS.apply(lambda x: np.log1p(x))
-        y2_Train_CS = y2_Train_CS.apply(lambda x: np.log1p(x))
-        model = linear_model.LinearRegression()
+        n_cols =X_Train_CS.shape[1]
+#        Tranform the data
+#        y1_Train_CS = y2_Train_CS.apply(lambda x: np.log1p(x))
+#        y2_Train_CS = y2_Train_CS.apply(lambda x: np.log1p(x))
+        model = Sequential()
+        model.add(layers.Dense(4, input_shape = (n_cols,)))
+        model.add(layers.Dense(2, activation='relu' ))
+        model.add(layers.Dense(1))
+        
+        model.compile(optimizer=Adam(lr=0.001),loss='mean_squared_error',metrics=['mse'])
+        
+        model2 = model
+        model.fit(X_Train_CS, y1_Train_CS,epochs=100)
+#     
+        y1_pred = model.predict(X_Test_CS)
+        
+        model2.fit(X_Train_CS, y2_Train_CS,epochs=100)
 
-# Intentional overfit for Testing purposes    
-#        model= XGBRegressor(
-#                             reg_alpha=0, 
-#                             reg_lambda=0,
-#                             eta = 0.1, 
-#                             n_estimators=5000,
-#                             random_state =7)   
-#        model= XGBRegressor(colsample_bytree=0.5,reg_alpha=1, reg_lambda=1, n_estimators=1000,random_state =7)
-        
-        xmodel1 = model
-        xmodel1.fit(X_Train_CS, y1_Train_CS)
-        y1_xpred = xmodel1.predict(X_Test_CS)
-        
-###        Need to add proper testing
-#        test1 = xmodel1.predict(X_xTrain_CS)
-#        print(np.sqrt(mean_squared_error(print, y1_xTrain_CS)))
-#        0.08515638189555029
-        xmodel2 = model
-        xmodel2.fit(X_Train_CS, y2_Train_CS)
-        y2_xpred = xmodel2.predict(X_Test_CS)
-        
-#        test2 =   xmodel2.predict(X_xTrain_CS)
-#        print(np.sqrt(mean_squared_error(test2, y2_xTrain_CS)))
+        y2_pred = model2.predict(X_Test_CS)
         
         xdata = pd.DataFrame({'ForecastId': X_Test_CS_Id, 
-                              'ConfirmedCases': np.expm1(y1_xpred) , 
-                              'Fatalities': np.expm1(y2_xpred)})
+                              'ConfirmedCases': y1_pred[:,0] , 
+                              'Fatalities': y2_pred[:,0]})
         out = pd.concat([out, xdata], axis=0)
         
 out.ForecastId = out.ForecastId.astype('int')
