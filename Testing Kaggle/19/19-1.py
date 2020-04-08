@@ -63,15 +63,17 @@ grouped_bulgaria_date = grouped_bulgaria.groupby('date')['date', 'confirmed', 'd
 grouped_bulgaria_date["newCases"] = grouped_bulgaria_date["confirmed"] - grouped_bulgaria_date["confirmed"].shift()
 grouped_bulgaria_date["newCases"] = grouped_bulgaria_date["newCases"].fillna(method='backfill')
 grouped_bulgaria_date["newCasesRolling"] = grouped_bulgaria_date.rolling(7,1)["newCases"].mean()
-grouped_bulgaria_date["confirmedLog"] = np.log(grouped_bulgaria_date["confirmed"])
+grouped_bulgaria_date["confirmedLog"] = np.log1p(grouped_bulgaria_date["confirmed"])
+grouped_bulgaria_date["newCasesRollingLog"] = np.log1p(grouped_bulgaria_date["newCasesRolling"])
 #check the Trend 
-ax2 = sns.lineplot(y="newCasesRolling", x="confirmedLog", data=grouped_bulgaria_date)
+ax3 = sns.lineplot(y="newCasesRollingLog", x="confirmedLog", data=grouped_bulgaria_date)
 plt.xlabel("Total Confirmed Cases - log scale")
-plt.xscale("log")
-plt.ylabel("New Daily Cases")
+
+plt.ylabel("New Daily Cases- log scale")
 #Other for reference
+#data.country.unique()
 #country = "China"
-country = "Italy"
+country = "China"
 grouped_ref = data[data['country'] == country].reset_index()
 grouped_ref_date = grouped_ref.groupby('date')['date', 'confirmed', 'deaths'].sum().reset_index()
 
@@ -79,12 +81,13 @@ grouped_ref_date = grouped_ref.groupby('date')['date', 'confirmed', 'deaths'].su
 grouped_ref_date["newCases"] = grouped_ref_date["confirmed"] - grouped_ref_date["confirmed"].shift()
 grouped_ref_date["newCases"] = grouped_ref_date["newCases"].fillna(method='backfill')
 grouped_ref_date["newCasesRolling"] = grouped_ref_date.rolling(7,1)["newCases"].mean()
-grouped_ref_date["confirmedLog"] = np.log(grouped_ref_date["confirmed"])
+grouped_ref_date["confirmedLog"] = np.log1p(grouped_ref_date["confirmed"])
+grouped_ref_date["newCasesRollingLog"] = np.log1p(grouped_ref_date["newCasesRolling"])
 #check the Trend 
-ax3 = sns.lineplot(y="newCasesRolling", x="confirmed", data=grouped_ref_date)
+ax3 = sns.lineplot(y="newCasesRollingLog", x="confirmedLog", data=grouped_ref_date)
 plt.xlabel("Total Confirmed Cases - log scale")
-plt.xscale("log")
-plt.ylabel("New Daily Cases")
+
+plt.ylabel("New Daily Cases- log scale")
 #Try Better plot I can send 
 #import plotly.express as px
 #

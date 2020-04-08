@@ -7,8 +7,11 @@ from sklearn import preprocessing
 
 from xgboost import XGBRegressor
 data_dir = Path('D:\\PythonTests\\Testing Kaggle\\19\\covid19-global-forecasting-week-3\\')
-#data_dir = '/kaggle/input/covid19-global-forecasting-week-3/'
-# Load Data
+#
+#xtrain = pd.read_csv('../input/covid19-global-forecasting-week-3/train.csv', parse_dates=['Date'])
+#xtest = pd.read_csv('../input/covid19-global-forecasting-week-3/test.csv', parse_dates=['Date'])
+#xsubmission = pd.read_csv('../input/covid19-global-forecasting-week-3/submission.csv')
+
 train = pd.read_csv(data_dir/'train.csv', parse_dates=['Date'])
 test = pd.read_csv(data_dir/'test.csv', parse_dates=['Date'])
 submission = pd.read_csv(data_dir/'submission.csv')
@@ -20,8 +23,8 @@ test.rename(columns={'Country_Region':'Country'}, inplace=True)
 train.rename(columns={'Province_State':'State'}, inplace=True)
 test.rename(columns={'Province_State':'State'}, inplace=True)
 
-#xtrain = xtrain[xtrain['Country'] == "Bulgaria"]
-#xtest= xtest[xtest['Country'] == "Bulgaria"]
+train = train[train['Country'] == "Bulgaria"]
+test= test[test['Country'] == "Bulgaria"]
 
 
 y1_Train = train.iloc[:, -2]
