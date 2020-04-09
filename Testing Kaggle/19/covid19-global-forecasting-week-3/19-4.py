@@ -9,7 +9,7 @@ from keras.models import Sequential
 from keras import layers
 from keras.optimizers import RMSprop,Adam
 from xgboost import XGBRegressor
-data_dir = Path('D:\\PythonTests\\Testing Kaggle\\19\\covid19-global-forecasting-week-3\\')
+data_dir = Path('D:\\PythonTests\\Testing Kaggle\\19\\covid19-global-forecasting-week-4\\')
 
 
 #

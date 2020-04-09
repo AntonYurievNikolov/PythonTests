@@ -8,32 +8,26 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 from pathlib import Path
-data_dir = Path('D:\\PythonTests\\Testing Kaggle\\19\\covid19-global-forecasting-week-3\\')
 
-cleaned_data = pd.read_csv(data_dir/'train.csv', parse_dates=['Date'])
+#cleaned_data.country.unique()
 
-cleaned_data.rename(columns={'Date': 'date', 
+data_dir = Path('D:\\PythonTests\\Testing Kaggle\\19\\covid19-global-forecasting-week-4')
+
+data = pd.read_csv(data_dir/'train.csv', parse_dates=['Date'])
+
+data.rename(columns={'Date': 'date', 
                      'Id': 'id',
                      'Province_State':'state',
                      'Country_Region':'country',
+                     'Lat':'lat',
+                     'Long': 'long',
                      'ConfirmedCases': 'confirmed',
                      'Fatalities':'deaths',
                     }, inplace=True)
 
-cleaned_data.head()
 
 
-# cases 
-cases = ['confirmed', 'deaths']
 
-cleaned_data['country'] = cleaned_data['country'].replace('Mainland China', 'China')
-
-# filling missing values 
-cleaned_data[['state']] = cleaned_data[['state']].fillna('')
-cleaned_data[cases] = cleaned_data[cases].fillna(0)
-cleaned_data.rename(columns={'Date':'date'}, inplace=True)
-
-data = cleaned_data
 
 grouped = data.groupby('date')['date', 'confirmed', 'deaths'].sum().reset_index()
 #enchance the data
@@ -52,27 +46,37 @@ grouped_bulgaria_date = grouped_bulgaria.groupby('date')['date', 'confirmed', 'd
 grouped_bulgaria_date["newCases"] = grouped_bulgaria_date["confirmed"] - grouped_bulgaria_date["confirmed"].shift()
 grouped_bulgaria_date["newCases"] = grouped_bulgaria_date["newCases"].fillna(method='backfill')
 grouped_bulgaria_date["newCasesRolling"] = grouped_bulgaria_date.rolling(7,1)["newCases"].mean()
-grouped_bulgaria_date["confirmedLog"] = np.log(grouped_bulgaria_date["confirmed"])
+grouped_bulgaria_date["confirmedLog"] = np.log1p(grouped_bulgaria_date["confirmed"])
+grouped_bulgaria_date["newCasesRollingLog"] = np.log1p(grouped_bulgaria_date["newCasesRolling"])
 #check the Trend 
-ax2 = sns.lineplot(y="newCasesRolling", x="confirmedLog", data=grouped_bulgaria_date)
+ax3 = sns.lineplot(y="newCasesRollingLog", x="confirmedLog", data=grouped_bulgaria_date)
 plt.xlabel("Total Confirmed Cases - log scale")
-plt.xscale("log")
+plt.ylabel("New Daily Cases- log scale")
+
+ax3 = sns.lineplot(y="newCasesRolling", x="confirmed", data=grouped_bulgaria_date)
+plt.xlabel("Total Confirmed Cases")
 plt.ylabel("New Daily Cases")
 #Other for reference
-#country = "China"
-country = "US"
+#data.country.unique()
+#country = "China"Netherlands
+country = "Netherlands"
 grouped_ref = data[data['country'] == country].reset_index()
 grouped_ref_date = grouped_ref.groupby('date')['date', 'confirmed', 'deaths'].sum().reset_index()
 
 #enchance the data
 grouped_ref_date["newCases"] = grouped_ref_date["confirmed"] - grouped_ref_date["confirmed"].shift()
 grouped_ref_date["newCases"] = grouped_ref_date["newCases"].fillna(method='backfill')
-grouped_ref_date["newCasesRolling"] = grouped_ref_date.rolling(7,1)["newCases"].mean()
-grouped_ref_date["confirmedLog"] = np.log(grouped_ref_date["confirmed"])
+grouped_ref_date["newCasesRolling"] = grouped_ref_date.rolling(2,1)["newCases"].mean()
+grouped_ref_date["confirmedLog"] = np.log1p(grouped_ref_date["confirmed"])
+grouped_ref_date["newCasesRollingLog"] = np.log1p(grouped_ref_date["newCasesRolling"])
 #check the Trend 
-ax3 = sns.lineplot(y="newCasesRolling", x="confirmedLog", data=grouped_ref_date)
+ax3 = sns.lineplot(y="newCasesRollingLog", x="confirmedLog", data=grouped_ref_date)
 plt.xlabel("Total Confirmed Cases - log scale")
-plt.xscale("log")
+plt.ylabel("New Daily Cases- log scale")
+
+
+ax3 = sns.lineplot(y="newCasesRolling", x="confirmed", data=grouped_ref_date)
+plt.xlabel("Total Confirmed Cases")
 plt.ylabel("New Daily Cases")
 #Try Better plot I can send 
 #import plotly.express as px

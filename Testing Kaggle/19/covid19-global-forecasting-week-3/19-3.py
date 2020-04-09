@@ -6,7 +6,7 @@ from sklearn import linear_model
 from sklearn import preprocessing
 
 from xgboost import XGBRegressor
-data_dir = Path('D:\\PythonTests\\Testing Kaggle\\19\\covid19-global-forecasting-week-3\\')
+data_dir = Path('D:\\PythonTests\\Testing Kaggle\\19\\covid19-global-forecasting-week-4\\')
 #
 #xtrain = pd.read_csv('../input/covid19-global-forecasting-week-3/train.csv', parse_dates=['Date'])
 #xtest = pd.read_csv('../input/covid19-global-forecasting-week-3/test.csv', parse_dates=['Date'])
