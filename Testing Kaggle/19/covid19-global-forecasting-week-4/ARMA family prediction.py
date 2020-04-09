@@ -1,168 +1,141 @@
+import numpy as np
+import pandas as pd
 from pathlib import Path
-import numpy as np # linear algebra
-import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
-import plotly.express as px
-import plotly.graph_objs as go
-from plotly.subplots import make_subplots
-from statsmodels.tsa.api import ExponentialSmoothing
-
-def RMSLE(pred,actual):
-    return np.sqrt(np.mean(np.power((np.log(pred+1)-np.log(actual+1)),2)))
-
-data_dir = Path('D:\\PythonTests\\Testing Kaggle\\19\\covid19-global-forecasting-week-4\\')
-
-pd.set_option('mode.chained_assignment', None)
-train = pd.read_csv(data_dir/'train.csv')
-test = pd.read_csv(data_dir/'test.csv')
-train['Province_State'].fillna('', inplace=True)
-test['Province_State'].fillna('', inplace=True)
-train['Date'] =  pd.to_datetime(train['Date'])
-test['Date'] =  pd.to_datetime(test['Date'])
-train = train.sort_values(['Country_Region','Province_State','Date'])
-test = test.sort_values(['Country_Region','Province_State','Date'])
-
-
-train = train[train['Country_Region'] == "Bulgaria"]
-test= test[test['Country_Region'] == "Bulgaria"]
-
-
-feature_day = [1,20,50,100,200,500,1000]
-def CreateInput(data):
-    feature = []
-    for day in feature_day:
-        #Get information in train data
-        data.loc[:,'Number day from ' + str(day) + ' case'] = 0
-        if (train[(train['Country_Region'] == country) & (train['Province_State'] == province) & (train['ConfirmedCases'] < day)]['Date'].count() > 0):
-            fromday = train[(train['Country_Region'] == country) & (train['Province_State'] == province) & (train['ConfirmedCases'] < day)]['Date'].max()        
-        else:
-            fromday = train[(train['Country_Region'] == country) & (train['Province_State'] == province)]['Date'].min()       
-        for i in range(0, len(data)):
-            if (data['Date'].iloc[i] > fromday):
-                day_denta = data['Date'].iloc[i] - fromday
-                data['Number day from ' + str(day) + ' case'].iloc[i] = day_denta.days 
-        feature = feature + ['Number day from ' + str(day) + ' case']
-    
-    return data[feature]
-pred_data_all = pd.DataFrame()
-for country in train['Country_Region'].unique():
-#for country in ['Vietnam']:
-    for province in train[(train['Country_Region'] == country)]['Province_State'].unique():
-        df_train = train[(train['Country_Region'] == country) & (train['Province_State'] == province)]
-        df_test = test[(test['Country_Region'] == country) & (test['Province_State'] == province)]
-        X_train = CreateInput(df_train)
-        y_train_confirmed = df_train['ConfirmedCases'].ravel()
-        y_train_fatalities = df_train['Fatalities'].ravel()
-        X_pred = CreateInput(df_test)
-        
-        # Only train above 50 cases
-        for day in sorted(feature_day,reverse = True):
-            feature_use = 'Number day from ' + str(day) + ' case'
-            idx = X_train[X_train[feature_use] == 0].shape[0]     
-            if (X_train[X_train[feature_use] > 0].shape[0] >= 20):
-                break
-                                           
-        adjusted_X_train = X_train[idx:][feature_use].values.reshape(-1, 1)
-        adjusted_y_train_confirmed = y_train_confirmed[idx:]
-        adjusted_y_train_fatalities = y_train_fatalities[idx:] #.values.reshape(-1, 1)
-        idx = X_pred[X_pred[feature_use] == 0].shape[0]    
-        adjusted_X_pred = X_pred[idx:][feature_use].values.reshape(-1, 1)
-        
-        pred_data = test[(test['Country_Region'] == country) & (test['Province_State'] == province)]
-        max_train_date = train[(train['Country_Region'] == country) & (train['Province_State'] == province)]['Date'].max()
-        min_test_date = pred_data['Date'].min()
-        #The number of day forcast
-        #pred_data[pred_data['Date'] > max_train_date].shape[0]
-        #model = SimpleExpSmoothing(adjusted_y_train_confirmed).fit()
-        #model = Holt(adjusted_y_train_confirmed).fit()
-        #model = Holt(adjusted_y_train_confirmed, exponential=True).fit()
-        #model = Holt(adjusted_y_train_confirmed, exponential=True, damped=True).fit()
-        model = ExponentialSmoothing(adjusted_y_train_confirmed, trend = 'additive').fit()
-        y_hat_confirmed = model.forecast(pred_data[pred_data['Date'] > max_train_date].shape[0])
-        y_train_confirmed = train[(train['Country_Region'] == country) & (train['Province_State'] == province) & (train['Date'] >=  min_test_date)]['ConfirmedCases'].values
-        y_hat_confirmed = np.concatenate((y_train_confirmed,y_hat_confirmed), axis = 0)
-               
-        #model = Holt(adjusted_y_train_fatalities).fit()
-        model = ExponentialSmoothing(adjusted_y_train_fatalities, trend = 'additive').fit()
-        y_hat_fatalities = model.forecast(pred_data[pred_data['Date'] > max_train_date].shape[0])
-        y_train_fatalities = train[(train['Country_Region'] == country) & (train['Province_State'] == province) & (train['Date'] >=  min_test_date)]['Fatalities'].values
-        y_hat_fatalities = np.concatenate((y_train_fatalities,y_hat_fatalities), axis = 0)
-        
-        
-        pred_data['ConfirmedCases_hat'] =  y_hat_confirmed
-        pred_data['Fatalities_hat'] = y_hat_fatalities
-        pred_data_all = pred_data_all.append(pred_data)
-
-df_val = pd.merge(pred_data_all,train[['Date','Country_Region','Province_State','ConfirmedCases','Fatalities']],on=['Date','Country_Region','Province_State'], how='left')
-df_val.loc[df_val['Fatalities_hat'] < 0,'Fatalities_hat'] = 0
-df_val.loc[df_val['ConfirmedCases_hat'] < 0,'ConfirmedCases_hat'] = 0
-df_val_1 = df_val.copy()
-
-
+from sklearn.metrics import mean_squared_error
+from sklearn import linear_model
+from sklearn import preprocessing
 from statsmodels.tsa.statespace.sarimax import SARIMAX
-from statsmodels.tsa.arima_model import ARIMA
+from xgboost import XGBRegressor
+data_dir = Path('D:\\PythonTests\\Testing Kaggle\\19\\covid19-global-forecasting-week-4\\')
+#
+#xtrain = pd.read_csv('../input/covid19-global-forecasting-week-3/train.csv', parse_dates=['Date'])
+#xtest = pd.read_csv('../input/covid19-global-forecasting-week-3/test.csv', parse_dates=['Date'])
+#xsubmission = pd.read_csv('../input/covid19-global-forecasting-week-3/submission.csv')
 
-pred_data_all = pd.DataFrame()
-for country in train['Country_Region'].unique():
-    for province in train[(train['Country_Region'] == country)]['Province_State'].unique():
-        df_train = train[(train['Country_Region'] == country) & (train['Province_State'] == province)]
-        df_test = test[(test['Country_Region'] == country) & (test['Province_State'] == province)]
-        X_train = CreateInput(df_train)
-        y_train_confirmed = df_train['ConfirmedCases'].ravel()
-        y_train_fatalities = df_train['Fatalities'].ravel()
-        X_pred = CreateInput(df_test)
+train = pd.read_csv(data_dir/'train.csv', parse_dates=['Date'])
+test = pd.read_csv(data_dir/'test.csv', parse_dates=['Date'])
+submission = pd.read_csv(data_dir/'submission.csv')
+
+
+train.rename(columns={'Country_Region':'Country'}, inplace=True)
+test.rename(columns={'Country_Region':'Country'}, inplace=True)
+
+train.rename(columns={'Province_State':'State'}, inplace=True)
+test.rename(columns={'Province_State':'State'}, inplace=True)
+
+train = train[train['Country'] == "Bulgaria"]
+test= test[test['Country'] == "Bulgaria"]
+
+
+y1_Train = train.iloc[:, -2]
+y2_Train = train.iloc[:, -1]
+
+
+NAN = "NAN"
+
+def fillState(state, country):
+    if state == NAN: return country
+    return state
+
+
+#Preprocessing
+X_Train = train.copy()
+
+X_Train['State'].fillna(NAN, inplace=True)
+X_Train['State'] = X_Train.loc[:, ['State', 'Country']].apply(lambda x : fillState(x['State'], x['Country']), axis=1)
+
+X_Train.loc[:, 'Date'] = X_Train.Date.dt.strftime("%m%d")
+X_Train["Date"]  = X_Train["Date"].astype(int)
+
+
+
+X_Test = test.copy()
+
+X_Test['State'].fillna(NAN, inplace=True)
+X_Test['State'] = X_Test.loc[:, ['State', 'Country']].apply(lambda x : fillState(x['State'], x['Country']), axis=1)
+
+X_Test.loc[:, 'Date'] = X_Test.Date.dt.strftime("%m%d")
+X_Test["Date"]  = X_Test["Date"].astype(int)
+
+
+le = preprocessing.LabelEncoder()
+
+X_Train.Country = le.fit_transform(X_Train.Country)
+X_Train['State'] = le.fit_transform(X_Train['State'])
+
+X_Test.Country = le.fit_transform(X_Test.Country)
+X_Test['State'] = le.fit_transform(X_Test['State'])
+
+
+countries = X_Train.Country.unique()
+
+
+#The Model
+out = pd.DataFrame({'ForecastId': [], 'ConfirmedCases': [], 'Fatalities': []})
+for country in countries:
+    states = X_Train.loc[X_Train.Country == country, :].State.unique()
+    for state in states:
+        X_Train_CS = X_Train.loc[(X_Train.Country == country) & (X_Train.State == state), ['State', 'Country', 'Date', 'ConfirmedCases', 'Fatalities']]
         
-        # Only train above 50 cases
-        for day in sorted(feature_day,reverse = True):
-            feature_use = 'Number day from ' + str(day) + ' case'
-            idx = X_train[X_train[feature_use] == 0].shape[0]     
-            if (X_train[X_train[feature_use] > 0].shape[0] >= 20):
-                break
-                                           
-        adjusted_X_train = X_train[idx:][feature_use].values.reshape(-1, 1)
-        adjusted_y_train_confirmed = y_train_confirmed[idx:]
-        adjusted_y_train_fatalities = y_train_fatalities[idx:] #.values.reshape(-1, 1)
-        idx = X_pred[X_pred[feature_use] == 0].shape[0]    
-        adjusted_X_pred = X_pred[idx:][feature_use].values.reshape(-1, 1)
+        y1_Train_CS = X_Train_CS.loc[:, 'ConfirmedCases']
+        y2_Train_CS = X_Train_CS.loc[:, 'Fatalities']
         
-        pred_data = test[(test['Country_Region'] == country) & (test['Province_State'] == province)]
-        max_train_date = train[(train['Country_Region'] == country) & (train['Province_State'] == province)]['Date'].max()
-        min_test_date = pred_data['Date'].min()
-        model = SARIMAX(adjusted_y_train_confirmed, order=(1,1,0), 
+        X_Train_CS = X_Train_CS.loc[:, ['State', 'Country', 'Date']]
+        
+        X_Train_CS.Country = le.fit_transform(X_Train_CS.Country)
+        X_Train_CS['State'] = le.fit_transform(X_Train_CS['State'])
+        
+        X_Test_CS = X_Test.loc[(X_Test.Country == country) & (X_Test.State == state), ['State', 'Country', 'Date', 'ForecastId']]
+        
+        X_Test_CS_Id = X_Test_CS.loc[:, 'ForecastId']
+        X_Test_CS = X_Test_CS.loc[:, ['State', 'Country', 'Date']]
+        
+        X_Test_CS.Country = le.fit_transform(X_Test_CS.Country)
+        X_Test_CS['State'] = le.fit_transform(X_Test_CS['State'])
+        
+        X_Test_CS_Min_Date = X_Test_CS['Date'].min()
+        X_Train_CS_Max_Date = X_Train_CS['Date'].max()
+
+#        #After we transform them they should roughly follow linear regression trend
+#        y1_Train_CS = y1_Train_CS.apply(lambda x: np.log1p(x))
+#        y2_Train_CS = y2_Train_CS.apply(lambda x: np.log1p(x))
+#        model = linear_model.LinearRegression()
+#
+#        
+#        xmodel1 = model
+#        xmodel1.fit(X_Train_CS, y1_Train_CS)
+#        y1_xpred = xmodel1.predict(X_Test_CS)
+#
+#        xmodel2 = model
+#        xmodel2.fit(X_Train_CS, y2_Train_CS)
+#        y2_xpred = xmodel2.predict(X_Test_CS)
+
+#        
+#        xdata = pd.DataFrame({'ForecastId': X_Test_CS_Id, 
+#                              'ConfirmedCases': np.expm1(y1_xpred) , 
+#                              'Fatalities': np.expm1(y2_xpred)})
+#        out = pd.concat([out, xdata], axis=0)
+                #SARIMA Data
+        model1 = SARIMAX(y1_Train_CS, order=(1,1,0), 
                         #seasonal_order=(1,1,0,12),
-                        measurement_error=True).fit(disp=False)
-        y_hat_confirmed = model.forecast(pred_data[pred_data['Date'] > max_train_date].shape[0])
-        y_train_confirmed = train[(train['Country_Region'] == country) & (train['Province_State'] == province) & (train['Date'] >=  min_test_date)]['ConfirmedCases'].values
-        y_hat_confirmed = np.concatenate((y_train_confirmed,y_hat_confirmed), axis = 0)
-               
-        model = SARIMAX(adjusted_y_train_fatalities, order=(1,1,0), 
+                        measurement_error=True).fit(disp=False)    
+        model2 = SARIMAX(y2_Train_CS, order=(1,1,0), 
                         #seasonal_order=(1,1,0,12),
-                        measurement_error=True).fit(disp=False)
-        y_hat_fatalities = model.forecast(pred_data[pred_data['Date'] > max_train_date].shape[0])
-        y_train_fatalities = train[(train['Country_Region'] == country) & (train['Province_State'] == province) & (train['Date'] >=  min_test_date)]['Fatalities'].values
-        y_hat_fatalities = np.concatenate((y_train_fatalities,y_hat_fatalities), axis = 0)
+                        measurement_error=True).fit(disp=False)   
+        y1_xpred = model1.forecast(X_Test_CS[X_Test_CS['Date'] > X_Train_CS_Max_Date].shape[0])
+        y2_xpred = model2.forecast(X_Test_CS[X_Test_CS['Date'] > X_Train_CS_Max_Date].shape[0])
         
+        train_confirmed_y1 = train[(X_Train_CS['Date'] >=  X_Test_CS_Min_Date)]['ConfirmedCases'].values
+        train_confirmed_y2 = train[(X_Train_CS['Date'] >=  X_Test_CS_Min_Date)]['Fatalities'].values
         
-        pred_data['ConfirmedCases_hat'] =  y_hat_confirmed
-        pred_data['Fatalities_hat'] = y_hat_fatalities
-        pred_data_all = pred_data_all.append(pred_data)
-
-df_val = pd.merge(pred_data_all,train[['Date','Country_Region','Province_State','ConfirmedCases','Fatalities']],on=['Date','Country_Region','Province_State'], how='left')
-df_val.loc[df_val['Fatalities_hat'] < 0,'Fatalities_hat'] = 0
-df_val.loc[df_val['ConfirmedCases_hat'] < 0,'ConfirmedCases_hat'] = 0
-df_val_2 = df_val.copy()
-
-
-
-#method_list = ['Exponential Smoothing','SARIMA']
-#method_val = [df_val_1,df_val_2]
-#for i in range(0,2):
-#    df_val = method_val[i]
-#    method_score = [method_list[i]] + [RMSLE(df_val[(df_val['ConfirmedCases'].isnull() == False)]['ConfirmedCases'].values,df_val[(df_val['ConfirmedCases'].isnull() == False)]['ConfirmedCases_hat'].values)] + [RMSLE(df_val[(df_val['Fatalities'].isnull() == False)]['Fatalities'].values,df_val[(df_val['Fatalities'].isnull() == False)]['Fatalities_hat'].values)]
-#    print (method_score)
-
-
-df_val = df_val_1
-submission = df_val[['ForecastId','ConfirmedCases_hat','Fatalities_hat']]
-submission.columns = ['ForecastId','ConfirmedCases','Fatalities']
-submission.to_csv('submission.csv', index=False)
-submission
+        y1_xpred = np.concatenate((train_confirmed_y1,y1_xpred), axis = 0)
+        y2_xpred = np.concatenate((train_confirmed_y2,y2_xpred), axis = 0)
+        
+        xdata = pd.DataFrame({'ForecastId': X_Test_CS_Id, 
+                              'ConfirmedCases': y1_xpred , 
+                              'Fatalities': y2_xpred})
+        out = pd.concat([out, xdata], axis=0)
+        
+out.ForecastId = out.ForecastId.astype('int')
+out.tail()
+out.to_csv('submission.csv', index=False)

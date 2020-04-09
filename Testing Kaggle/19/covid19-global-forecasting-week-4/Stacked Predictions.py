@@ -5,7 +5,10 @@ import plotly.express as px
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 from statsmodels.tsa.api import ExponentialSmoothing
+from statsmodels.tsa.statespace.sarimax import SARIMAX
 
+def RMSLE(pred,actual):
+    return np.sqrt(np.mean(np.power((np.log(pred+1)-np.log(actual+1)),2)))
 
 data_dir = Path('D:\\PythonTests\\Testing Kaggle\\19\\covid19-global-forecasting-week-4\\')
 
@@ -22,9 +25,6 @@ test = test.sort_values(['Country_Region','Province_State','Date'])
 
 train = train[train['Country_Region'] == "Bulgaria"]
 test= test[test['Country_Region'] == "Bulgaria"]
-
-def RMSLE(pred,actual):
-    return np.sqrt(np.mean(np.power((np.log(pred+1)-np.log(actual+1)),2)))
 
 
 feature_day = [1,20,50,100,200,500,1000]
@@ -44,9 +44,6 @@ def CreateInput(data):
         feature = feature + ['Number day from ' + str(day) + ' case']
     
     return data[feature]
-
-from statsmodels.tsa.statespace.sarimax import SARIMAX
-from statsmodels.tsa.arima_model import ARIMA
 
 pred_data_all = pd.DataFrame()
 for country in train['Country_Region'].unique():
@@ -84,7 +81,7 @@ for country in train['Country_Region'].unique():
         model = SARIMAX(adjusted_y_train_fatalities, order=(1,1,0), 
                         #seasonal_order=(1,1,0,12),
                         measurement_error=True).fit(disp=False)
-        y_hat_fatalities = model.forecast(pred_data[pred_data['Date'] > max_train_date].shape[0])
+        y_hat_fatalities = model.forecast(2)
         y_train_fatalities = train[(train['Country_Region'] == country) & (train['Province_State'] == province) & (train['Date'] >=  min_test_date)]['Fatalities'].values
         y_hat_fatalities = np.concatenate((y_train_fatalities,y_hat_fatalities), axis = 0)
         
@@ -96,7 +93,8 @@ for country in train['Country_Region'].unique():
 df_val = pd.merge(pred_data_all,train[['Date','Country_Region','Province_State','ConfirmedCases','Fatalities']],on=['Date','Country_Region','Province_State'], how='left')
 df_val.loc[df_val['Fatalities_hat'] < 0,'Fatalities_hat'] = 0
 df_val.loc[df_val['ConfirmedCases_hat'] < 0,'ConfirmedCases_hat'] = 0
-df_val_1 = df_val.copy()
+df_val_2 = df_val.copy()
+
 #method_list = ['Exponential Smoothing','SARIMA']
 #method_val = [df_val_1,df_val_2]
 #for i in range(0,2):
