@@ -75,12 +75,13 @@ out = pd.DataFrame({'ForecastId': [], 'ConfirmedCases': [], 'Fatalities': []})
 for country in countries:
     states = X_Train.loc[X_Train.Country == country, :].State.unique()
     for state in states:
+        country
         X_Train_CS = X_Train.loc[(X_Train.Country == country) & (X_Train.State == state), ['State', 'Country', 'Date', 'ConfirmedCases', 'Fatalities']]
         
         y1_Train_CS = X_Train_CS.loc[:, 'ConfirmedCases']
         y2_Train_CS = X_Train_CS.loc[:, 'Fatalities']
         
-        X_Train_CS = X_Train_CS.loc[:, ['State', 'Country', 'Date']]
+#        X_Train_CS = X_Train_CS.loc[:, ['State', 'Country', 'Date']]
         
         X_Train_CS.Country = le.fit_transform(X_Train_CS.Country)
         X_Train_CS['State'] = le.fit_transform(X_Train_CS['State'])
@@ -96,26 +97,8 @@ for country in countries:
         X_Test_CS_Min_Date = X_Test_CS['Date'].min()
         X_Train_CS_Max_Date = X_Train_CS['Date'].max()
 
-#        #After we transform them they should roughly follow linear regression trend
-#        y1_Train_CS = y1_Train_CS.apply(lambda x: np.log1p(x))
-#        y2_Train_CS = y2_Train_CS.apply(lambda x: np.log1p(x))
-#        model = linear_model.LinearRegression()
-#
-#        
-#        xmodel1 = model
-#        xmodel1.fit(X_Train_CS, y1_Train_CS)
-#        y1_xpred = xmodel1.predict(X_Test_CS)
-#
-#        xmodel2 = model
-#        xmodel2.fit(X_Train_CS, y2_Train_CS)
-#        y2_xpred = xmodel2.predict(X_Test_CS)
 
-#        
-#        xdata = pd.DataFrame({'ForecastId': X_Test_CS_Id, 
-#                              'ConfirmedCases': np.expm1(y1_xpred) , 
-#                              'Fatalities': np.expm1(y2_xpred)})
-#        out = pd.concat([out, xdata], axis=0)
-                #SARIMA Data
+        #SARIMA Data
         model1 = SARIMAX(y1_Train_CS, order=(1,1,0), 
                         #seasonal_order=(1,1,0,12),
                         measurement_error=True).fit(disp=False)    
@@ -125,17 +108,46 @@ for country in countries:
         y1_xpred = model1.forecast(X_Test_CS[X_Test_CS['Date'] > X_Train_CS_Max_Date].shape[0])
         y2_xpred = model2.forecast(X_Test_CS[X_Test_CS['Date'] > X_Train_CS_Max_Date].shape[0])
         
-        train_confirmed_y1 = train[(X_Train_CS['Date'] >=  X_Test_CS_Min_Date)]['ConfirmedCases'].values
-        train_confirmed_y2 = train[(X_Train_CS['Date'] >=  X_Test_CS_Min_Date)]['Fatalities'].values
+        train_confirmed_y1 = X_Train_CS[(X_Train_CS['Date'] >=  X_Test_CS_Min_Date)]['ConfirmedCases']
+        train_confirmed_y2 = X_Train_CS[(X_Train_CS['Date'] >=  X_Test_CS_Min_Date)]['Fatalities']
         
         y1_xpred = np.concatenate((train_confirmed_y1,y1_xpred), axis = 0)
         y2_xpred = np.concatenate((train_confirmed_y2,y2_xpred), axis = 0)
         
+        
+        #Simple Linear Model witnout Enchancing the Data
+        #After we transform them they should roughly follow linear regression trend
+        X_Train_CS = X_Train_CS.loc[:, ['State', 'Country', 'Date']]
+        y1_Train_CS = y1_Train_CS.apply(lambda x: np.log1p(x))
+        y2_Train_CS = y2_Train_CS.apply(lambda x: np.log1p(x))
+        train_confirmed_y1 = train_confirmed_y1.apply(lambda x: np.log1p(x))
+        train_confirmed_y2 = train_confirmed_y2.apply(lambda x: np.log1p(x))
+        model = linear_model.LinearRegression()
+
+        
+        xmodel1 = model
+        xmodel1.fit(X_Train_CS, y1_Train_CS)
+        y1_xpred = xmodel1.predict(X_Test_CS[X_Test_CS['Date'] > X_Train_CS_Max_Date])
+
+        xmodel2 = model
+        xmodel2.fit(X_Train_CS, y2_Train_CS)
+        y2_xpred = xmodel2.predict(X_Test_CS[X_Test_CS['Date'] > X_Train_CS_Max_Date])
+
+        y1_xpred = np.concatenate((train_confirmed_y1,y1_xpred), axis = 0)
+        y2_xpred = np.concatenate((train_confirmed_y2,y2_xpred), axis = 0)
+        
         xdata = pd.DataFrame({'ForecastId': X_Test_CS_Id, 
-                              'ConfirmedCases': y1_xpred , 
-                              'Fatalities': y2_xpred})
+                              'ConfirmedCases': np.expm1(y1_xpred) , 
+                              'Fatalities': np.expm1(y2_xpred)})
         out = pd.concat([out, xdata], axis=0)
+        
+#        
+#        xdata = pd.DataFrame({'ForecastId': X_Test_CS_Id, 
+#                              'ConfirmedCases': y1_xpred , 
+#                              'Fatalities': y2_xpred})
+#        out = pd.concat([out, xdata], axis=0)
         
 out.ForecastId = out.ForecastId.astype('int')
 out.tail()
 out.to_csv('submission.csv', index=False)
+out

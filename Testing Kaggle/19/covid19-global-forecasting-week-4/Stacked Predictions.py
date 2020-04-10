@@ -81,7 +81,7 @@ for country in train['Country_Region'].unique():
         model = SARIMAX(adjusted_y_train_fatalities, order=(1,1,0), 
                         #seasonal_order=(1,1,0,12),
                         measurement_error=True).fit(disp=False)
-        y_hat_fatalities = model.forecast(2)
+        y_hat_fatalities = model.forecast(pred_data[pred_data['Date'] > max_train_date].shape[0])
         y_train_fatalities = train[(train['Country_Region'] == country) & (train['Province_State'] == province) & (train['Date'] >=  min_test_date)]['Fatalities'].values
         y_hat_fatalities = np.concatenate((y_train_fatalities,y_hat_fatalities), axis = 0)
         
@@ -95,6 +95,7 @@ df_val.loc[df_val['Fatalities_hat'] < 0,'Fatalities_hat'] = 0
 df_val.loc[df_val['ConfirmedCases_hat'] < 0,'ConfirmedCases_hat'] = 0
 df_val_2 = df_val.copy()
 
+
 #method_list = ['Exponential Smoothing','SARIMA']
 #method_val = [df_val_1,df_val_2]
 #for i in range(0,2):
@@ -102,6 +103,8 @@ df_val_2 = df_val.copy()
 #    method_score = [method_list[i]] + [RMSLE(df_val[(df_val['ConfirmedCases'].isnull() == False)]['ConfirmedCases'].values,df_val[(df_val['ConfirmedCases'].isnull() == False)]['ConfirmedCases_hat'].values)] + [RMSLE(df_val[(df_val['Fatalities'].isnull() == False)]['Fatalities'].values,df_val[(df_val['Fatalities'].isnull() == False)]['Fatalities_hat'].values)]
 #    print (method_score)
 
+
+df_val = df_val_2
 submission = df_val[['ForecastId','ConfirmedCases_hat','Fatalities_hat']]
 submission.columns = ['ForecastId','ConfirmedCases','Fatalities']
 submission.to_csv('submission.csv', index=False)
