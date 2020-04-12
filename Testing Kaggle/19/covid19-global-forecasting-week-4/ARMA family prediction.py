@@ -118,10 +118,10 @@ for country in countries:
         #Simple Linear Model witnout Enchancing the Data
         #After we transform them they should roughly follow linear regression trend
         X_Train_CS = X_Train_CS.loc[:, ['State', 'Country', 'Date']]
-        y1_Train_CS = y1_Train_CS.apply(lambda x: np.log1p(x))
-        y2_Train_CS = y2_Train_CS.apply(lambda x: np.log1p(x))
-        train_confirmed_y1 = train_confirmed_y1.apply(lambda x: np.log1p(x))
-        train_confirmed_y2 = train_confirmed_y2.apply(lambda x: np.log1p(x))
+#        y1_Train_CS = y1_Train_CS.apply(lambda x: np.log1p(x))
+#        y2_Train_CS = y2_Train_CS.apply(lambda x: np.log1p(x))
+#        train_confirmed_y1 = train_confirmed_y1.apply(lambda x: np.log1p(x))
+#        train_confirmed_y2 = train_confirmed_y2.apply(lambda x: np.log1p(x))
         model = linear_model.LinearRegression()
 
         
@@ -136,16 +136,16 @@ for country in countries:
         y1_xpred = np.concatenate((train_confirmed_y1,y1_xpred), axis = 0)
         y2_xpred = np.concatenate((train_confirmed_y2,y2_xpred), axis = 0)
         
-        xdata = pd.DataFrame({'ForecastId': X_Test_CS_Id, 
-                              'ConfirmedCases': np.expm1(y1_xpred) , 
-                              'Fatalities': np.expm1(y2_xpred)})
-        out = pd.concat([out, xdata], axis=0)
-        
-#        
 #        xdata = pd.DataFrame({'ForecastId': X_Test_CS_Id, 
-#                              'ConfirmedCases': y1_xpred , 
-#                              'Fatalities': y2_xpred})
+#                              'ConfirmedCases': np.expm1(y1_xpred) , 
+#                              'Fatalities': np.expm1(y2_xpred)})
 #        out = pd.concat([out, xdata], axis=0)
+        
+        
+        xdata = pd.DataFrame({'ForecastId': X_Test_CS_Id, 
+                              'ConfirmedCases': y1_xpred , 
+                              'Fatalities': y2_xpred})
+        out = pd.concat([out, xdata], axis=0)
         
 out.ForecastId = out.ForecastId.astype('int')
 out.tail()
