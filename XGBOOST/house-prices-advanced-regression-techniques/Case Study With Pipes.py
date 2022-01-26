@@ -10,19 +10,21 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer
 from sklearn.pipeline import FeatureUnion
 from sklearn_pandas import DataFrameMapper
-from sklearn_pandas import CategoricalImputer
+# from sklearn_pandas import CategoricalImputer
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import FeatureUnion
 import pandas as pd
 import numpy as np
 
+import os
+cwd = os.getcwd()
 
 #
 #train = pd.read_csv('../input/train.csv')
 #test = pd.read_csv('../input/test.csv')
 
-train = pd.read_csv("train.csv")
-test = pd.read_csv("test.csv")
+train = pd.read_csv("C:\\Work\\Python\\PythonTests\\XGBOOST\\house-prices-advanced-regression-techniques\\train.csv")
+test = pd.read_csv("C:\\Work\\Python\\PythonTests\\XGBOOST\\house-prices-advanced-regression-techniques\\test.csv")
 #We do not need the ID column
 train_ID = train['Id']
 test_ID = test['Id']
@@ -56,10 +58,10 @@ y =  train.iloc[:,-1]
 get_text_data = FunctionTransformer(lambda x: x[categorical_columns], validate=False)
 get_numeric_data = FunctionTransformer(lambda x: x[non_categorical_columns], validate=False)
 
-xgbreg=xgb.XGBRegressor(colsample_bytree=0.4603, gamma=0.0468, 
-                             learning_rate=0.05, max_depth=3, 
-                             min_child_weight=1.7817, n_estimators=2200,
-                             reg_alpha=0.4640, reg_lambda=0.8571,
+xgbreg=xgb.XGBRegressor(     colsample_bytree=0.4603, gamma=0.06, 
+                             learning_rate=0.05, max_depth=4, 
+                             min_child_weight=1.8, n_estimators=2200,
+                             reg_alpha=0.47, reg_lambda=0.86,
                              subsample=0.5213, silent=1,
                              random_state =7, nthread = -1)
 

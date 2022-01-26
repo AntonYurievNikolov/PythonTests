@@ -1,0 +1,44 @@
+import numpy as np
+import random
+import pandas as pd
+#import seaborn as sns
+#Parameters
+
+def TotoDraw(type1 = 6, type2 = 49, n = 200):
+    data = np.zeros([type2], dtype=int)
+
+    toto = np.array  (
+                        range(1, type2+1)
+                    )  
+
+    totolist = list(
+                range(1, type2+1)
+            )
+
+
+    for i in range(n):
+        draw = random.sample(totolist,type1)
+        for d in draw:
+            data[d-1] = data[d-1]+1
+            toto[d-1] = toto[d-1]+1
+
+
+
+    datasorted = np.sort(data) 
+
+    i = 0
+    print("Toto ",type1, " от ", type2, ":")
+    for number in data:
+        i = i+1
+        if number >= datasorted[type2-6]:
+            print("Число:" , i ,"Пъти:",number)
+
+
+
+random.seed(9072021)
+TotoDraw(n=20000)
+TotoDraw(6,42,20000)
+TotoDraw(5,35,20000)
+        
+
+
