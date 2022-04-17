@@ -5,11 +5,15 @@ from sklearn import linear_model
 import pickle
 
 
-df = pd.read_csv("prices.csv")
+#df = pd.read_csv("prices.csv")
+#y = df['Value'] 
+#X = df[['Rooms', 'Distance']]
+
+df = pd.read_csv("cats.csv")
 y = df['Value'] 
-X = df[['Rooms', 'Distance']]
+X = df[['catKg', 'catType']]
 
 lm = linear_model.LinearRegression()
 lm.fit(X, y)
 
-pickle.dump(lm, open('model.pkl','wb')) 
+pickle.dump(lm, open('modelCats.pkl','wb')) 
