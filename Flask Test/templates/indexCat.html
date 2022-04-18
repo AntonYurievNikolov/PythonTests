@@ -13,7 +13,13 @@
 
       <form action="{{ url_for('predict')}}" method="post">
         <input type="text" name="kg" placeholder="kg" required="required" value="4"/>
-        <input type="text" name="type" placeholder="type" required="required" value="1"/>
+        <select name="type" id="type">
+          <option value="3">Neutered or spayed</option>
+          <option value="4">Typical pet, intact</option>
+          <option value="2">Prone to gaining weight</option>
+          <option value="1">Pet in need of weight loss</option>
+        </select>
+        <!--<input type="text" name="type" placeholder="type" required="required" value="1"/>-->
         <button type="submit" class="btn btn-primary btn-block btn-large">Predict Value!</button>
       </form>
 

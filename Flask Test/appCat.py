@@ -1,3 +1,4 @@
+from unicodedata import decimal
 from flask import Flask, request, render_template
 import pickle
 import requests
@@ -12,7 +13,7 @@ def home():
 @app.route('/predict',methods=['POST'])
 def predict():
     """Grabs the input values and uses them to make prediction"""
-    kg = int(request.form["kg"])
+    kg = float(request.form["kg"])
     type = int(request.form["type"])
     prediction = model.predict([[kg, type]])  
     output = round(prediction[0], 2) 
